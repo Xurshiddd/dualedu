@@ -1,0 +1,7 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Laravelga asosiy URL yo'naltirishlarini yuborish
+    RewriteRule ^(.*)$ public/index.php [L]
+</IfModule>

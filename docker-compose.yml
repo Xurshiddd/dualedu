@@ -1,0 +1,51 @@
+version: '3.9'
+services:
+    nginx:
+        image: nginx:latest
+        volumes:
+            - ./:/var/www/
+            - ./_docker/nginx/conf.d/:/etc/nginx/conf.d/
+        ports:
+            - "8234:80"
+        container_name: project_nginx
+        depends_on:
+            - app
+    app:
+        build:
+            context: .
+            dockerfile: _docker/app/Dockerfile
+        volumes:
+            - ./:/var/www
+        depends_on:
+            - db
+            - node
+        container_name: project_app
+    db:
+        image: mysql:latest
+        restart: always
+        volumes:
+            - ./tmp/db:/var/lib/mysql
+        environment:
+            MYSQL_DATABASE: docker_mysql
+            MYSQL_ROOT_PASSWORD: root
+        ports:
+            - "8123:3306"
+        container_name: project_db
+    node:
+        image: node:latest
+        working_dir: /var/www
+        volumes:
+            - .:/var/www
+        command: npm install
+        container_name: project_node
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin:latest
+        restart: always
+        ports:
+            - "8322:80"
+        environment:
+            PMA_HOST: db
+            MYSQL_ROOT_PASSWORD: root
+        depends_on:
+            - db
+        container_name: project_phpmyadmin

@@ -1,0 +1,37 @@
+create table fakultets(
+    id integer primary key autoincrement ,
+    name varchar(200) not null ,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+insert into fakultets (name) values ('Dizayn va texnologiyalar fakulteti');
+insert into fakultets (name) values ('Sanoat texnologiyalar va mexanika fakulteti');
+insert into fakultets (name) values ('Toqimachilik muhandisligi fakulteti');
+insert into fakultets (name) values ('Iqtisodiyot fakulteti');
+create table kafedras(
+                          id integer primary key autoincrement ,
+                          name varchar(200) not null ,
+                          fakultet_id integer,
+                          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                          updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+insert into kafedras (name, fakultet_id) values ('Tikuv buyumlar texnologiyasi va raqamli injiniring', 1);
+insert into kafedras (name, fakultet_id) values ('Moda va dizayn', 1);
+insert into kafedras (name, fakultet_id) values ('Сhаrm va poyabzal muhandisligi', 1);
+insert into kafedras (name, fakultet_id) values ('Tabiiy fапlаr ("Kimyo" hamda "Fizika va elektrotexnika" kafedralari birlashtirilgan)', 1);
+insert into kafedras (name, fakultet_id) values ('"Kimyo" hamda "Fizika va elektrotexnika" kafedralari birlashtirilgan ("Oliy matematika" уа informatika va "Muhandislik grafikasi ча mehanikasi" kafedralari birlashtirilgan)', 1);
+
+insert into kafedras (name, fakultet_id) values ('Tolali materiallarni dastlabki ishlash', 2);
+insert into kafedras (name, fakultet_id) values ('Mexanika muhandisligi', 2);
+insert into kafedras (name, fakultet_id) values ('Avtomatlashtirish va dasturiy injiniгing', 2);
+insert into kafedras (name, fakultet_id) values ('Mehnat muxofazasi va ekologiya', 2);
+
+insert into kafedras (name, fakultet_id) values ('Toqimachilik matolari texnologiyasi', 3);
+insert into kafedras (name, fakultet_id) values ('Ipak va yigirish texnologiyasi ("Ipak texnologiyasi" va "Yigirish texnolosiyasi" kafedralari birlashtirilgап)', 3);
+insert into kafedras (name, fakultet_id) values ('Materialshunoslik va standartlashtirish', 3);
+insert into kafedras (name, fakultet_id) values ('Kimyo va matbaa muhandisligi ("Kimyoviy texnologiyа" va "Matbaa vaqadoqlash jarayonlari tcxnologiyasi" kafedralari birlashtirilgan)', 3);
+
+insert into kafedras (name, fakultet_id) values ('Buxgalteriya hisobi va marketing ("Korporativ boshqaruv" kafedrasi negizida tashkil etilgan)', 4);
+insert into kafedras (name, fakultet_id) values ('Iqtisodiyot va menejment', 4);
+insert into kafedras (name, fakultet_id) values ('Ozbek va xorijiy tillar', 4);
+insert into kafedras (name, fakultet_id) values ('Ijtimoiy fanlar va jismoniy madaniyat', 4);
