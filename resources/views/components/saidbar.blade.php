@@ -28,10 +28,13 @@
             </li>
             @endif
             <li>
-                <a href="#"><i class="fa-solid fa-code-pull-request"></i>So'rovlar <span class="fa arrow"></span></a>
+                <a href="#"><i class="fa-solid fa-code-pull-request"></i>Moderator<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li>
-                        <a href="#">Barcha so'rovlar</a>
+                        <a href="{{ route('groups.index') }}">Groups</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('addresses.index') }}">Address</a>
                     </li>
                 </ul>
             </li>

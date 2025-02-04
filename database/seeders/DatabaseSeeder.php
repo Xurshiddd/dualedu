@@ -31,5 +31,6 @@ class DatabaseSeeder extends Seeder
 
         $user = User::find(1);
         $user->assignRole('Admin');
+        User::factory(20)->create();
     }
 }

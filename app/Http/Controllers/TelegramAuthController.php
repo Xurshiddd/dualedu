@@ -10,18 +10,10 @@ use Laravel\Socialite\Facades\Socialite;
 
 class TelegramAuthController extends Controller
 {
-    public function handleTelegramCallback(TelegramLoginAuth $telegramLoginAuth, Request $request)
-    {
-        if ($user = $telegramLoginAuth->validate($request)) {
-            dd($user);
-        }
-        dd('asda');
-        // ...
-    }
     public function callback()
     {
         $telegramUser = Socialite::driver('telegram')->user();
-        $user = User::where('telegram_id', $telegramUser->getId())->first();
+        $user = User::where('telegram_id', (int)$telegramUser->getId())->first();
         if (!$user) {
             $user = User::create([
                 'name' => $telegramUser->getName() ?? '',
