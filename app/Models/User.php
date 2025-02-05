@@ -21,8 +21,9 @@ class User extends Authenticatable
     protected $fillable = [
         'telegram_id',
         'name',
-        'email',
+        'phone',
         'password',
+        'is_student'
     ];
 
     /**
@@ -47,7 +48,11 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
+    public function findForPassport($identifier)
+    {
+        // Telefon raqami bilan tekshirish
+        return $this->where('phone', $identifier)->first();
+    }
     public function address(): HasOne
     {
         return $this->hasOne(Address::class);

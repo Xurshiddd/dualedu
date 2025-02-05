@@ -16,7 +16,7 @@ class GroupController extends Controller
     public function create()
     {
         $group = new Group();
-        $users = User::all();
+        $users = User::whereDoesntHave('groups')->where('is_student', '!=', false)->get();
         return view('groups.create', compact('group', 'users'));
     }
     public function store(Request $request)
@@ -46,7 +46,12 @@ class GroupController extends Controller
     }
     public function edit(Group $group)
     {
-        $users = User::all();
+        $groupUsers = $group->users()->pluck('users.id');
+
+        $users = User::whereDoesntHave('groups')
+            ->where('is_student', '!=', false)
+            ->orWhereIn('id', $groupUsers)
+            ->get();
         return view('groups.create', compact('group', 'users'));
     }
     public function update(Request $request, Group $group)
@@ -74,7 +79,6 @@ class GroupController extends Controller
     public function destroy(Group $group)
     {
         try {
-            // Agar guruhning users() bog‘lanishi bo‘lsa, uni ajratamiz (detach)
             $group->users()->detach();
 
             // Guruhni o‘chiramiz

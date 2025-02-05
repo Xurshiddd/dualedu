@@ -8,6 +8,7 @@
     <div class="row">
         <!-- Form -->
         <div class="col-md-6">
+            <a href="{{ route('addresses.index') }}" class="btn bg-info m-3" style="margin: 10px">Ortga</a>
             <div class="panel panel-info">
                 <div class="panel-heading">Address Create</div>
                 <div class="panel-body">
@@ -67,7 +68,7 @@
         </div>
 
         <!-- Map -->
-        <div class="col-md-6">
+        <div class="col-md-6" style="margin-top: 50px">
             <div id="map" style="height: 400px;"></div>
         </div>
     </div>

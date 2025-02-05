@@ -5,7 +5,7 @@
 @section('')
 @endsection
 @section('content')
-    <a href="/admin/users/create" class="btn btn-success">Qo'shish</a>
+    <a href="/admin/users/create" class="btn btn-success inline">Qo'shish</a>
     <div>
         @if ($message = Session::get('success'))
             <div class="alert alert-success">
@@ -25,17 +25,17 @@
                             <tr>
                                 <th>#</th>
                                 <th>Ism</th>
-                                <th>Email</th>
+                                <th>Phone</th>
                                 <th>Roli</th>
                                 <th>Xarakat</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($users as $user)
+                            @foreach($users as $key => $user)
                                 <tr>
-                                    <td>{{ $user->id }}</td>
+                                    <td>{{ $key + 1 }}</td>
                                     <td>{{ $user->name }}</td>
-                                    <td>{{ $user->email }}</td>
+                                    <td>{{ $user->phone }}</td>
                                     <td>
                                         @foreach($user->roles as $role)
                                             {{ $role->name }}{{ !$loop->last ? ', ' : '' }}
@@ -44,7 +44,7 @@
 
                                     <td style="display: flex; justify-content: space-around">
                                         <a href="{{ route('users.edit', $user->id) }}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                        <form action="{{ route('users.destroy', $user->id) }}" method="POST">
+                                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" style="border: none; background-color: white"><i class="fa-solid fa-trash"></i></button>
@@ -54,6 +54,7 @@
                             @endforeach
                             </tbody>
                         </table>
+                        {{ $users->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
             </div>

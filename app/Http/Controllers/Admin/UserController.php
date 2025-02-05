@@ -15,7 +15,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with(['roles'])->orderBy('id', 'desc')->get();
+        $users = User::with(['roles'])->orderBy('id', 'asc')->paginate(15);
+
         return view('users.index', compact('users'));
     }
 
@@ -33,16 +34,18 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+//        dd($request->all());
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users,email',
+            'phone' => 'required|string|min:9|max:13',
             'password' => 'required|min:6',
             'roles' => 'required|array'
         ]);
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'phone' => '+998'.$request->phone,
+            'password' => Hash::make($request->password),
+            'is_student' => $request->is_student ? 1 : 0,
         ]);
         $user->syncRoles($request->roles);
         return redirect()->route('users.index')->with('success', 'User created successfully.');
@@ -71,9 +74,10 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+//        dd($request->all());
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email',
+            'phone' => 'required|string|min:9|max:13',
             'roles' => 'required|array'
         ]);
 
@@ -82,7 +86,8 @@ class UserController extends Controller
         // Update user details
         $data = [
             'name' => $request->name,
-            'email' => $request->email,
+            'phone' => '+998'.$request->phone,
+            'is_student' => $request->is_student ? 1 : 0,
         ];
 
         // Update password only if provided

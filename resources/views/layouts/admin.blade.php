@@ -13,6 +13,7 @@
             margin: 0;
             padding: 0;
             height: 100%!important;
+            font-family: Arial;
         }
 
         .content {
@@ -33,6 +34,7 @@
         }
 
     </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input/build/css/intlTelInput.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 <body>
@@ -62,6 +64,8 @@
     &copy; 2024 Raqamli ta`lim texnalogiyalari bo'limi!!!
 </div>
 @include('components.script')
+
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input/build/js/intlTelInput.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     @yield('script')

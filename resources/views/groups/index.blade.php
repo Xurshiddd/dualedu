@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('h1')
-    Roles
+    Groups
 @endsection
 @section('')
 @endsection
@@ -11,7 +11,7 @@
             <!--   Kitchen Sink -->
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Roles
+                    Groups
                 </div>
                 <div class="panel-body">
                     <div class="table-responsive">
@@ -24,9 +24,9 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($groups as $group)
+                            @foreach($groups as $key => $group)
                                 <tr>
-                                    <td>{{ $group->id }}</td>
+                                    <td>{{ $key + 1 }}</td>
                                     <td>{{ $group->name }}</td>
                                     <td style="display: flex; justify-content: space-around">
                                         <a href="{{ route('groups.edit', $group->id) }}"><i class="fa fa-pencil" aria-hidden="true"></i></a>

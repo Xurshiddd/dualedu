@@ -2,7 +2,7 @@
 @section('h1')
     Roles
 @endsection
-@section('')
+@section('style')
 @endsection
 @section('content')
     <a href="/admin/users" class="btn btn-success">ortga</a>
@@ -15,13 +15,17 @@
                 <input class="form-control" name="name" type="text" value="{{ $user->name }}">
             </div>
             <div class="form-group">
-                <label>Email</label>
-                <input class="form-control" name="email" type="email" value="{{ $user->email }}">
+                <label>Telefon</label>
+                <input type="tel" id="phone" name="phone" class="form-control" maxlength="9" value="{{ substr($user->phone, -9) }}" required>
             </div>
             <div class="form-group">
                 <label>Password</label>
                 <input class="form-control" name="password" type="password">
                 <small style="color: #00CA79">Agar parolni yangilamoqchi bo'lmasangiz bo'sh qoldiring</small>
+            </div>
+            <div class="form-group">
+                <label>Student</label>
+                <input type="checkbox" name="is_student" class="form-checkbox" @checked($user->is_student == true)>
             </div>
             <div class="form-group">
                 <label>Roles</label>
@@ -40,6 +44,13 @@
     </div>
 @endsection
 @section('script')
+    <script>
+        var input = document.querySelector("#phone");
+        var iti = window.intlTelInput(input, {
+            initialCountry: "uz",
+            utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input/build/js/utils.js"
+        });
+    </script>
     <script>
         $(document).ready(function() {
             $('.select2').select2();
