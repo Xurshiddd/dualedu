@@ -46,14 +46,18 @@ class GroupController extends Controller
     }
     public function edit(Group $group)
     {
-        $groupUsers = $group->users()->pluck('users.id');
+        $groupUsers = $group->users()->pluck('users.id'); // Shu guruhga tegishli foydalanuvchilar
 
-        $users = User::whereDoesntHave('groups')
-            ->where('is_student', '!=', false)
-            ->orWhereIn('id', $groupUsers)
+        $users = User::where(function ($query) use ($groupUsers) {
+            $query->whereDoesntHave('groups')
+            ->orWhereIn('id', $groupUsers);
+        })
+            ->where('is_student', true)
             ->get();
+
         return view('groups.create', compact('group', 'users'));
     }
+
     public function update(Request $request, Group $group)
     {
         $request->validate([

@@ -12,17 +12,58 @@
 </head>
 <body>
 <div class="container">
-    <form action="{{route('logout')}}" method="post">
+    <form id="imageForm" action="{{ route('inspectors.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
-        <button type="submit" class="btn p-3 bg-color-black">Chiqish</button>
-    </form>
-    <form class="mt-5" method="POST" action="{{ route('addresses.store') }}" enctype="multipart/form-data">
-        <div class="form-group">
-            <label for="photo"></label>
-            <input type="file" class="form-control" name="photos[]" id="photo" placeholder="Enter Photo" multiple="multiple">
+
+        <!-- Rasm input -->
+        <div>
+            <label for="photo" class="block">Upload Image</label>
+            <input type="file" name="photo" id="photo" class="block mt-1 w-full" required>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+
+        <!-- Hidden fields for geolocation -->
+        <input type="hidden" name="latitude" id="latitude">
+        <input type="hidden" name="longitude" id="longitude">
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </div>
     </form>
+
+    <script>
+        // Geolokatsiyani olish va formaga kiritish
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                // Geolokatsiya muvaffaqiyatli olinganidan so'ng
+                var latitude = position.coords.latitude;
+                var longitude = position.coords.longitude;
+
+                // Formaga latitude va longitude qo'shish
+                document.getElementById('latitude').value = latitude;
+                document.getElementById('longitude').value = longitude;
+            }, function(error) {
+                // Xatolik yuz berishi holatida xabar
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        alert("Foydalanuvchi geolokatsiyani olishga ruxsat bermadi.");
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        alert("Geolokatsiya ma'lumotlari mavjud emas.");
+                        break;
+                    case error.TIMEOUT:
+                        alert("Geolokatsiya olishda vaqt o‘tgach xatolik yuz berdi.");
+                        break;
+                    case error.UNKNOWN_ERROR:
+                        alert("Noma'lum xatolik yuz berdi.");
+                        break;
+                }
+            });
+        } else {
+            alert("Geolokatsiya bu brauzerda qo'llab-quvvatlanmaydi.");
+        }
+
+
+    </script>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

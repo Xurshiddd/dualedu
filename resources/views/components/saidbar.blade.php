@@ -38,6 +38,9 @@
                     </li>
                 </ul>
             </li>
+            <li>
+                <a href="#"><i class="fa-solid fa-briefcase"></i>Inspector</a>
+            </li>
         </ul>
     </div>
 </nav>

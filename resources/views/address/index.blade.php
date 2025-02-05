@@ -60,6 +60,7 @@
                     @endforelse
                     </tbody>
                 </table>
+                {{ $addresses->links() }}
             </div>
         </div>
     </div>

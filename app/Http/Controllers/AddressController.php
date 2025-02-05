@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use App\Models\Group;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class AddressController extends Controller
 {
@@ -21,7 +19,7 @@ class AddressController extends Controller
                         $g->where('groups.id', $groupId);
                     });
                 });
-            })->get();
+            })->paginate(15);
         return view('address.index', compact('addresses', 'groups', 'groupId'));
     }
 

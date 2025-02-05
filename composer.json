@@ -8,6 +8,7 @@
         "php": "^8.2",
         "azate/laravel-telegram-login-auth": "^2.4",
         "guzzlehttp/guzzle": "^7.9",
+        "intervention/image": "^3.11",
         "laravel/framework": "^11.9",
         "laravel/socialite": "^5.17",
         "laravel/tinker": "^2.9",
