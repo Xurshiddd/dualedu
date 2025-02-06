@@ -12,7 +12,8 @@ class Inspector extends Model
         'user_id',
         'image_id',
         'group_id',
-        'status'
+        'status',
+        'distance'
     ];
     public function user(): BelongsTo
     {

@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('inspectors', function (Blueprint $table) {
+        Schema::create('practic_dates', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('image_id')->constrained('images');
-            $table->foreignId('group_id')->constrained('groups');
-            $table->boolean('status')->default(false);
-            $table->decimal(10,2,'distance')->nullable();
+            $table->integer('year');
+            $table->integer('month');
+            $table->integer('day');
+            $table->foreignId('group_id')->constrained('groups')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('inspectors');
+        Schema::dropIfExists('practic_dates');
     }
 };

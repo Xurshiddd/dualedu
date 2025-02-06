@@ -53,12 +53,12 @@
 
                         <div class="form-group">
                             <label>Longitude</label>
-                            <input type="text" id="longitude" name="long" class="form-control" readonly>
+                            <input type="text" id="longitude" name="longitude" class="form-control" readonly>
                         </div>
 
                         <div class="form-group">
                             <label>Latitude</label>
-                            <input type="text" id="latitude" name="lat" class="form-control" readonly>
+                            <input type="text" id="latitude" name="latitude" class="form-control" readonly>
                         </div>
 
                         <button type="submit" class="btn btn-info">Save</button>

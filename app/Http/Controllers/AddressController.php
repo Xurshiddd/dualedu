@@ -36,8 +36,8 @@ class AddressController extends Controller
             'street' => 'nullable|string|max:255',
             'number' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:255',
-            'long' => 'nullable|string|max:255',
-            'lat' => 'nullable|string|max:255',
+            'longitude' => 'nullable|string|max:255',
+            'latitude' => 'nullable|string|max:255',
         ]);
 
         Address::create([
@@ -46,8 +46,8 @@ class AddressController extends Controller
             'street' => $request->street,
             'number' => $request->number,
             'city' => $request->city,
-            'long' => $request->long,
-            'lat' => $request->lat,
+            'longitude' => $request->longitude,
+            'latitude' => $request->latitude,
         ]);
 
         return redirect()->route('addresses.create')->with('success', 'Address added successfully!');

@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('street')->nullable();
             $table->string('number')->nullable();
             $table->string('city')->nullable();
-            $table->string('long')->nullable();
-            $table->string('lat')->nullable();
+            $table->string('longitude')->nullable();
+            $table->string('latitude')->nullable();
             $table->timestamps();
         });
     }

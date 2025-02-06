@@ -43,7 +43,7 @@ class UserController extends Controller
         ]);
         $user = User::create([
             'name' => $request->name,
-            'phone' => '+998'.$request->phone,
+            'phone' => '+998'.trim($request->phone),
             'password' => Hash::make($request->password),
             'is_student' => $request->is_student ? 1 : 0,
         ]);
@@ -86,7 +86,7 @@ class UserController extends Controller
         // Update user details
         $data = [
             'name' => $request->name,
-            'phone' => '+998'.$request->phone,
+            'phone' => '+998'.trim($user->phone),
             'is_student' => $request->is_student ? 1 : 0,
         ];
 

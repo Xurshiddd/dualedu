@@ -12,6 +12,32 @@
 </head>
 <body>
 <div class="container">
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" id="error-alert">
+            {{ session('error') }}
+        </div>
+
+        <script>
+            setTimeout(function() {
+                document.getElementById('error-alert').style.display = 'none';
+            }, 5000); // 5 sekunddan keyin yo‘qoladi
+        </script>
+    @endif
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" id="success-alert">
+                {{ session('success') }}
+            </div>
+
+            <script>
+                setTimeout(function() {
+                    document.getElementById('success-alert').style.display = 'none';
+                }, 5000); // 5 sekunddan keyin yo‘qoladi
+            </script>
+        @endif
+    <form action="{{ route('logout') }}" method="post">
+        @csrf
+        <button type="submit" class="btn bg-info">Chiqish</button>
+    </form>
     <form id="imageForm" action="{{ route('inspectors.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
@@ -29,7 +55,6 @@
             <button type="submit" class="btn btn-primary">Upload</button>
         </div>
     </form>
-
     <script>
         // Geolokatsiyani olish va formaga kiritish
         if (navigator.geolocation) {
