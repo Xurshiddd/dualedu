@@ -39,6 +39,7 @@
                 }, 5000); // 5 sekunddan keyin yo‘qoladi
             </script>
         @endif
+        <a href="{{ route('practics.index') }}" class="btn bg-info">Ortga</a>
         <form action="{{ route('practics.store') }}" method="POST">
             @csrf
             <div class="mb-3">

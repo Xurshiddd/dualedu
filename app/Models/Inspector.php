@@ -10,7 +10,6 @@ class Inspector extends Model
 {
     protected $fillable = [
         'user_id',
-        'image_id',
         'group_id',
         'status',
         'distance'

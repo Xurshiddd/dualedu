@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class InspectorController extends Controller
 {
+    public function index()
+    {
+        $inspectors = Inspector::with('group','user', 'images')->get();
+        return view('inspectors.index', compact('inspectors'));
+    }
     public function store(Request $request)
     {
         $request->validate([
@@ -29,20 +34,22 @@ class InspectorController extends Controller
         $status = $distance <= 1300;
         $file = $request->file('photo');
         $filepath = $file->store($directory, 'public');
-        $img = Image::create([
-            'name' => $file->getClientOriginalName(),
-            'url' => $filepath, // Use the uploaded path
-        ]);
-
-// Add to Inspector table
-        Inspector::create([
+        $inp = Inspector::create([
             'user_id' => $user->id,
             'group_id' => $user->groups[0]->id,
-            'image_id' => $img->id,
             'status' => $status,
             'distance' => $distance,
         ]);
-        return redirect()->back()->with('success', 'Rasm muvofaqiyatli saqlandi');
+        Image::create([
+            'name' => $file->getClientOriginalName(),
+            'url' => $filepath,
+            'inspector_id' => $inp->id,
+        ]);
+        $res = 'Rasm saqlandi geolacatsiya to\'g\'ri kelmadi';
+        if ($status == true) {
+            $res = 'Rasm saqlandi siz amaliyot joyidasiz';
+        }
+        return redirect()->back()->with('success', $res);
     }
 
     public function calculateDistance($lat1, $lon1, $lat2, $lon2)

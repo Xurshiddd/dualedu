@@ -13,7 +13,8 @@ class PracticDateController extends Controller
      */
     public function index()
     {
-        //
+        $groups = Group::with('dates')->get();
+        return view('practics.index', ['groups' => $groups]);
     }
 
     /**
@@ -31,7 +32,6 @@ class PracticDateController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'year' => 'required',
             'group_id' => 'required',
             'days' => 'required',
         ]);
@@ -39,9 +39,7 @@ class PracticDateController extends Controller
         foreach ($dateArray as $date) {
             PracticDate::create([
                 'group_id' => $request->group_id,
-                'year' => $request->year,
-                'month' => date('m', strtotime($date)),
-                'day' => date('d', strtotime($date)),
+                'day' => $date,
             ]);
         }
         return redirect()->back()->with('success', 'Muvofaqiyatli saqlandi!');

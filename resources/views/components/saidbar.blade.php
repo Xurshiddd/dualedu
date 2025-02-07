@@ -31,15 +31,18 @@
                 <a href="#"><i class="fa-solid fa-code-pull-request"></i>Moderator<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li>
-                        <a href="{{ route('groups.index') }}">Groups</a>
+                        <a href="{{ route('groups.index') }}">Guruh</a>
                     </li>
                     <li>
-                        <a href="{{ route('addresses.index') }}">Address</a>
+                        <a href="{{ route('addresses.index') }}">Manzil</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('practics.index') }}">Amaliyot davri</a>
                     </li>
                 </ul>
             </li>
             <li>
-                <a href="#"><i class="fa-solid fa-briefcase"></i>Inspector</a>
+                <a href="{{ route('inspectors.index') }}"><i class="fa-solid fa-briefcase"></i>Tekshiruv</a>
             </li>
         </ul>
     </div>

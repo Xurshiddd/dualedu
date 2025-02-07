@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'admin',
             'phone' => '+998975413303',
             'password' => bcrypt('123456'),
+            'telegram_id' => 898426931,
             'is_student' => false,
         ]);
         $adminRole = Role::create(['name' => 'Admin']);

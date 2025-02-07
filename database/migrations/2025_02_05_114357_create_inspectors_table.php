@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('inspectors', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('image_id')->constrained('images');
             $table->foreignId('group_id')->constrained('groups');
             $table->boolean('status')->default(false);
-            $table->decimal(10,2,'distance')->nullable();
+            $table->decimal('distance', 10, 2)->nullable();
             $table->timestamps();
         });
     }

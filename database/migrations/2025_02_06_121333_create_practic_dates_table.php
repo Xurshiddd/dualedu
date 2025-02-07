@@ -13,9 +13,7 @@ return new class extends Migration
     {
         Schema::create('practic_dates', function (Blueprint $table) {
             $table->id();
-            $table->integer('year');
-            $table->integer('month');
-            $table->integer('day');
+            $table->date('day');
             $table->foreignId('group_id')->constrained('groups')->cascadeOnDelete();
             $table->timestamps();
         });

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Group extends Model
 {
@@ -12,5 +13,10 @@ class Group extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, 'group_user');
+    }
+
+    public function dates(): HasMany
+    {
+        return $this->hasMany(PracticDate::class);
     }
 }
