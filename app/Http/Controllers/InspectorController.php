@@ -33,7 +33,11 @@ class InspectorController extends Controller
         $distance = $this->calculateDistance($userLat, $userLon, $storedLat, $storedLon);
         $status = $distance <= 1300;
         $file = $request->file('photo');
-        $filepath = $file->store($directory, 'public');
+        $file_name = time().$file->getClientOriginalName();
+        $file->move(public_path('uploads'), $file_name);
+
+        $file_url = 'uploads/' . $file_name;
+
         $inp = Inspector::create([
             'user_id' => $user->id,
             'group_id' => $user->groups[0]->id,
@@ -42,7 +46,7 @@ class InspectorController extends Controller
         ]);
         Image::create([
             'name' => $file->getClientOriginalName(),
-            'url' => $filepath,
+            'url' => $file_url,
             'inspector_id' => $inp->id,
         ]);
         $res = 'Rasm saqlandi geolacatsiya to\'g\'ri kelmadi';

@@ -32,7 +32,7 @@
                     <td>{{ $inspector->created_at->format('Y-m-d') }}</td>
                     <td>
                         @if($inspector->images->isNotEmpty())
-                            <img src="{{ asset('storage/' . $inspector->images->first()->url) }}" alt="Image" width="50">
+                            <img src="{{asset($inspector->images->first()->url)}}" alt="Image" width="50">
                         @else
                             <span>No Image</span>
                         @endif
