@@ -19,4 +19,8 @@ class Group extends Model
     {
         return $this->hasMany(PracticDate::class);
     }
+    public function practiceDates(): HasMany
+    {
+        return $this->hasMany(PracticDate::class, 'group_id');
+    }
 }

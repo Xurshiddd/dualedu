@@ -83,20 +83,30 @@ class UserController extends Controller
 
         $user = User::findOrFail($id);
 
-        // Update user details
-        $data = [
-            'name' => $request->name,
-            'phone' => '+998'.trim($user->phone),
-            'is_student' => $request->is_student ? 1 : 0,
-        ];
-
         // Update password only if provided
-        if (!empty($request->password)) {
-            $data['password'] = Hash::make($request->password);
+        $phone = preg_replace('/\D/', '', $request->phone); // Faqat raqamlarni olish
+
+        if (strlen($phone) == 9) {
+            $phone = '998' . $phone;
         }
 
-        $user->update($data);
+        if (!str_starts_with($phone, '998')) {
+            $phone = '998' . $phone;
+        }
 
+        $phone = '+'.$phone;
+
+        $user->update([
+            'name' => $request->name,
+            'phone' => $phone, // To‘g‘ri formatlangan raqam
+            'is_student' => $request->is_student ? 1 : 0,
+        ]);
+
+        if (!empty($request->password)) {
+            $user->update([
+                'password' => Hash::make($request->password)
+            ]);
+        }
         // Sync roles (remove old ones and assign new ones)
         $user->syncRoles($request->roles);
 

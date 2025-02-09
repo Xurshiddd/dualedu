@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Group;
 use App\Models\Image;
 use App\Models\Inspector;
+use App\Models\PracticDate;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -63,6 +65,16 @@ class TelegramSaverController extends Controller
                     'message' => "❌ Foydalanuvchi topilmadi!"
                 ]);
             }
+            $group_id = optional($user->groups->first())->id;
+            $p_day = PracticDate::where('group_id', $group_id)->where('day', date('Y-m-d'))->exists();
+
+            if (!$p_day) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Bugun amaliyot kuni emas'
+                ]);
+            }
+
 
             if (!$user->address) {
                 return response()->json([
@@ -119,7 +131,6 @@ class TelegramSaverController extends Controller
             $file_url = "uploads/".$file_name;
 
 
-            $group_id = optional($user->groups->first())->id;
             $inspector = Inspector::create([
                 'user_id' => $user->id,
                 'group_id' => $group_id,

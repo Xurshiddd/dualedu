@@ -9,7 +9,9 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\InspectorController;
 use App\Http\Controllers\PracticDateController;
 use App\Http\Controllers\TelegramAuthController;
+use App\Models\Address;
 use App\Models\Group;
+use App\Models\PracticDate;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -40,9 +42,16 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         'practics' => PracticDateController::class,
     ]);
     Route::get('/groups/{group}/users', function($id) {
-        $group = Group::with('users')->findOrFail($id);
+        $group = Group::with(['users' => function ($query) {
+            $query->doesntHave('address');
+        }])->findOrFail($id);
         return response()->json($group->users);
     });
+    Route::get('/get-practice-dates/{group_id}', function ($group_id) {
+        $dates = PracticDate::where('group_id', $group_id)->pluck('day');
+        return response()->json($dates);
+    });
+
 });
 Route::middleware(['guest'])->group(function () {
     Route::get('/auth/telegram/redirect', function () {

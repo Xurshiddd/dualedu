@@ -13,22 +13,18 @@ class InspectorController extends Controller
     public function index(Request $request)
     {
         $groupId = $request->get('group_id');
+        $date = $request->get('date', date('Y-m-d')); // Default: bugungi sana
 
         $inspectors = Inspector::with(['user', 'images', 'group'])
             ->when($groupId, function ($query) use ($groupId) {
                 $query->where('group_id', $groupId);
-            })
-            ->orderByDesc('created_at')
-            ->get();
+            })->whereDate('created_at', '=', $date)->get();
 
         $groups = Group::all();
+        $practiceDates = $groupId ? PracticDate::where('group_id', $groupId)->pluck('day') : [];
 
-        // Amaliyot kunlarini olish
-        $practiceDates = PracticDate::whereIn('group_id', $groups->pluck('id'))->get();
-
-        return view('inspectors.index', compact('inspectors', 'groups', 'groupId', 'practiceDates'));
+        return view('inspectors.index', compact('inspectors', 'groups', 'groupId', 'practiceDates', 'date'));
     }
-
 
     public function store(Request $request)
     {
@@ -37,14 +33,18 @@ class InspectorController extends Controller
             'longitude' => 'required|numeric',
             'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:17408', // 17MB
         ]);
-        $directory = 'uploads';
         $userLat = $request->input('latitude');
         $userLon = $request->input('longitude');
         $user = auth()->user();
         if (!$user || !$user->address || is_null($user->address->longitude) || is_null($user->address->latitude)) {
             return redirect()->back()->with('error', 'location yoqilmagan');
         }
+        $group_id = optional($user->groups->first())->id;
+        $p_day = PracticDate::where('group_id', $group_id)->where('day', date('Y-m-d'))->exists();
 
+        if (!$p_day) {
+            return redirect()->back()->with('error', 'Bugun amaliyot kuni emas');
+        }
         $storedLat = $user->address->latitude;
         $storedLon = $user->address->longitude;
         $distance = $this->calculateDistance($userLat, $userLon, $storedLat, $storedLon);

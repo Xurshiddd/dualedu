@@ -1,17 +1,17 @@
 @extends('layouts.admin')
 
 @section('h1')
-    Inspector Dashboard
+    Inspector
 @endsection
 @section('style')
 @endsection
 @section('content')
     <div class="container">
-        <h2 class="mb-3">Inspector Dashboard</h2>
+        <h2 class="mb-3">Tekshiruv</h2>
 
         <!-- Filtrlash -->
-        <form action="{{ route('inspectors.index') }}" method="GET" class="d-flex align-items-center mb-3">
-            <select name="group_id" class="form-select form-control" style="width: 20%;">
+        <form action="{{ route('inspectors.index') }}" method="GET" style="display: flex; align-items: center; margin-top: 10px; margin-bottom: 10px;">
+            <select name="group_id" id="group-select" class="form-select form-control" style="width: 20%;">
                 <option value="">Barcha guruhlar</option>
                 @foreach($groups as $g)
                     <option value="{{ $g->id }}" {{ request('group_id') == $g->id ? 'selected' : '' }}>
@@ -19,15 +19,19 @@
                     </option>
                 @endforeach
             </select>
-
-            <select name="status" class="form-select form-control ml-3" style="width: 20%;">
-                <option value="">Barchasi</option>
-                <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Bor</option>
-                <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>Yo‘q</option>
+            <!-- Sana bo‘yicha filter -->
+            <select name="date" id="date-select" class="form-select form-control ml-3" style="width: 20%; margin-right: 10px; margin-left: 10px">
+                <option value="">Barcha kunlar</option>
+                @foreach($practiceDates as $p)
+                    <option value="{{ $p }}" {{ request('date', date('Y-m-d')) == $p ? 'selected' : '' }}>
+                        {{ $p }}
+                    </option>
+                @endforeach
             </select>
 
             <button type="submit" class="btn btn-primary ml-3">Filter</button>
         </form>
+
 
         <!-- Jadval -->
         <div class="table-responsive">
@@ -35,9 +39,9 @@
                 <thead class="table-primary text-center">
                 <tr>
                     <th>Users</th>
-                    <th>Guruh</th>
+                    <th>Telefon</th>
                     <th>Status</th>
-                    <th>Amaliyot Kuni</th>
+                    <th>Amaliyotdan uzoqda</th>
                     <th>Joylashuv</th>
                     <th>Rasm</th>
                 </tr>
@@ -49,7 +53,7 @@
                         <td>{{ $inspector->user->name ?? 'N/A' }}</td>
 
                         <!-- Guruh -->
-                        <td>{{ $inspector->group->name ?? 'N/A' }}</td>
+                        <td>{{ $inspector->user->phone ?? 'N/A' }}</td>
 
                         <!-- Status -->
                         <td class="text-center">
@@ -62,11 +66,9 @@
 
                         <!-- Amaliyot kuni -->
                         <td class="text-center">
-                            @php
-                                $practiceDate = $practiceDates->where('group_id', $inspector->group_id)->first();
-                            @endphp
-                            {{ $practiceDate ? $practiceDate->day : 'N/A' }}
+                            {{ $inspector ? $inspector->distance : 'N/A' }}
                         </td>
+
 
                         <!-- Geolokatsiya -->
                         <td class="text-center">
@@ -101,4 +103,27 @@
     </div>
 @endsection
 @section('script')
+    <script>
+        document.getElementById('group-select').addEventListener('change', function () {
+            let groupId = this.value;
+            let dateSelect = document.getElementById('date-select');
+
+            // Eski kunlarni tozalash
+            dateSelect.innerHTML = '<option value="">Barcha kunlar</option>';
+
+            if (groupId) {
+                fetch(`/admin/get-practice-dates/${groupId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(function (date) {
+                            let option = document.createElement('option');
+                            option.value = date;
+                            option.textContent = date;
+                            dateSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Xatolik:', error));
+            }
+        });
+    </script>
 @endsection

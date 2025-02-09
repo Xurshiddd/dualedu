@@ -8,7 +8,7 @@
     <div class="row">
         <!-- Form -->
         <div class="col-md-6">
-            <a href="{{ route('addresses.index') }}" class="btn bg-info m-3" style="margin: 10px">Ortga</a>
+            <a href="{{ route('addresses.index') }}" class="btn bg-info m-3">Ortga</a>
             <div class="panel panel-info">
                 <div class="panel-heading">Address Create</div>
                 <div class="panel-body">
@@ -67,7 +67,7 @@
             </div>
         </div>
 
-        <!-- Map -->
+        <!-- Google Map -->
         <div class="col-md-6" style="margin-top: 50px">
             <div id="map" style="height: 400px;"></div>
         </div>
@@ -78,11 +78,51 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!-- Leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <!-- Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7tWTnuArv9FmZXyN17vDENp58iIGb5CE&callback=initMap" async defer></script>
 
     <script>
+        function initMap() {
+            var defaultLocation = { lat: 41.2995, lng: 69.2401 }; // Toshkent koordinatalari
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 13,
+                center: defaultLocation
+            });
+
+            var marker = new google.maps.Marker({
+                position: defaultLocation,
+                map: map,
+                draggable: true
+            });
+
+            // Marker harakatlantirilganda koordinatalarni o‘zgartirish
+            google.maps.event.addListener(marker, 'dragend', function(event) {
+                document.getElementById('latitude').value = event.latLng.lat();
+                document.getElementById('longitude').value = event.latLng.lng();
+            });
+
+            // Xaritada bosilganda marker joylashuvini yangilash
+            google.maps.event.addListener(map, 'click', function(event) {
+                marker.setPosition(event.latLng);
+                document.getElementById('latitude').value = event.latLng.lat();
+                document.getElementById('longitude').value = event.latLng.lng();
+            });
+
+            // Brauzerdan foydalanuvchi lokatsiyasini olish
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    map.setCenter(userLocation);
+                    marker.setPosition(userLocation);
+                    document.getElementById('latitude').value = userLocation.lat;
+                    document.getElementById('longitude').value = userLocation.lng;
+                });
+            }
+        }
+
         $(document).ready(function() {
             // Group select bo'yicha AJAX orqali foydalanuvchilarni yuklash
             $('#groupSelect').change(function() {
@@ -96,34 +136,12 @@
                         url: '/admin/groups/' + groupId + '/users',
                         type: 'GET',
                         success: function(users) {
-                            console.log(users)
                             users.forEach(function(user) {
                                 userSelect.append('<option value="' + user.id + '">' + user.name + '</option>');
                             });
                         }
                     });
                 }
-            });
-
-            // Leaflet xarita sozlamalari
-            var map = L.map('map').setView([41.2995, 69.2401], 13); // Toshkent koordinatalari
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
-
-            var marker = L.marker([41.2995, 69.2401], { draggable: true }).addTo(map);
-
-            marker.on('dragend', function(event) {
-                var position = marker.getLatLng();
-                $('#latitude').val(position.lat);
-                $('#longitude').val(position.lng);
-            });
-
-            map.on('click', function(e) {
-                marker.setLatLng(e.latlng);
-                $('#latitude').val(e.latlng.lat);
-                $('#longitude').val(e.latlng.lng);
             });
         });
     </script>
