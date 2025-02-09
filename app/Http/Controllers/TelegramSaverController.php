@@ -43,14 +43,13 @@ class TelegramSaverController extends Controller
     public function saveImage(Request $request)
     {
         try {
-            \Log::info('Request data:', $request->all());
-
             $telegram_id = $request->input('telegram_id');
             $latitude = $request->input('latitude');
             $longitude = $request->input('longitude');
             $file_id = $request->input('file_id'); // 📂 file_id
 
             if (!$telegram_id || !$latitude || !$longitude || !$file_id) {
+                \Log::info('error:', "❌ So'rovda yetarli ma'lumot yo‘q!");
                 return response()->json([
                     'status' => 'error',
                     'message' => "❌ So'rovda yetarli ma'lumot yo‘q!"
@@ -87,6 +86,7 @@ class TelegramSaverController extends Controller
 
             $response = Http::get($file_path_url);
             if ($response->failed()) {
+                \Log::info('error: ', $response->json());
                 return response()->json([
                     'status' => 'error',
                     'message' => "❌ Telegram'dan fayl ma'lumotini olishda xatolik!"
@@ -99,6 +99,7 @@ class TelegramSaverController extends Controller
             // 🛠️ Rasmni yuklab olish
             $file_content = Http::get($photo_url);
             if ($file_content->failed()) {
+                \Log::info('error: ', $file_content->json());
                 return response()->json([
                     'status' => 'error',
                     'message' => "❌ Telegram rasmni yuklab olishda xatolik!"
@@ -109,19 +110,15 @@ class TelegramSaverController extends Controller
             $file_name = time() . ".jpg";
             $storage_path = public_path("uploads/{$file_name}");
 
-// 📂 Agar katalog mavjud bo'lmasa, yaratamiz
             if (!file_exists(dirname($storage_path))) {
                 mkdir(dirname($storage_path), 0777, true);
             }
 
-// 📥 Rasmni yuklab saqlaymiz
             file_put_contents($storage_path, $file_content);
 
-// 🌐 URL yaratamiz
             $file_url = "uploads/".$file_name;
 
 
-            // 📝 Inspektorni saqlash
             $group_id = optional($user->groups->first())->id;
             $inspector = Inspector::create([
                 'user_id' => $user->id,
@@ -130,7 +127,6 @@ class TelegramSaverController extends Controller
                 'distance' => $distance,
             ]);
 
-            // 🏞️ Rasmni saqlash
             Image::create([
                 'name' => $file_name,
                 'url' => $file_url,
@@ -145,6 +141,7 @@ class TelegramSaverController extends Controller
             ]);
 
         } catch (\Exception $e) {
+            \Log::info('error: ', $e->getMessage());
             return response()->json([
                 'status' => 'error',
                 'message' => "❌ Xatolik yuz berdi: " . $e->getMessage()

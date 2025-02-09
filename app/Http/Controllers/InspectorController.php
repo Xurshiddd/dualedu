@@ -2,17 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Group;
 use App\Models\Image;
 use App\Models\Inspector;
+use App\Models\PracticDate;
 use Illuminate\Http\Request;
 
 class InspectorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $inspectors = Inspector::with('group','user', 'images')->get();
-        return view('inspectors.index', compact('inspectors'));
+        $groupId = $request->get('group_id');
+
+        $inspectors = Inspector::with(['user', 'images', 'group'])
+            ->when($groupId, function ($query) use ($groupId) {
+                $query->where('group_id', $groupId);
+            })
+            ->orderByDesc('created_at')
+            ->get();
+
+        $groups = Group::all();
+
+        // Amaliyot kunlarini olish
+        $practiceDates = PracticDate::whereIn('group_id', $groups->pluck('id'))->get();
+
+        return view('inspectors.index', compact('inspectors', 'groups', 'groupId', 'practiceDates'));
     }
+
+
     public function store(Request $request)
     {
         $request->validate([
