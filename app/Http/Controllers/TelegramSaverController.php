@@ -48,7 +48,7 @@ class TelegramSaverController extends Controller
             $telegram_id = $request->input('telegram_id');
             $latitude = $request->input('latitude');
             $longitude = $request->input('longitude');
-            $file_id = $request->input('file_id'); // 📂 file_id
+            $file_id = $request->input('file_id');
 
             if (!$telegram_id || !$latitude || !$longitude || !$file_id) {
                 \Log::info('error:', "❌ So'rovda yetarli ma'lumot yo‘q!");
@@ -59,6 +59,13 @@ class TelegramSaverController extends Controller
             }
 
             $user = User::where('telegram_id', $telegram_id)->first();
+            $today = Inspector::where('user_id', $user->id)->whereDate('created_at', '=', date('Y-m-d'))->first();
+            if ($today) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Bir kunda 1 marta rasm qoldirish mumkun!'
+                ]);
+            }
             if (!$user) {
                 return response()->json([
                     'status' => 'error',

@@ -27,9 +27,13 @@
                 </ul>
             </li>
             @endif
+            @can('moderator')
             <li>
                 <a href="#"><i class="fa-solid fa-code-pull-request"></i>Moderator<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
+                    <li>
+                        <a href="{{ route('students.index') }}">Talabalar</a>
+                    </li>
                     <li>
                         <a href="{{ route('groups.index') }}">Guruh</a>
                     </li>
@@ -41,9 +45,12 @@
                     </li>
                 </ul>
             </li>
+            @endcan
+            @can('inspector')
             <li>
                 <a href="{{ route('inspectors.index') }}"><i class="fa-solid fa-briefcase"></i>Tekshiruv</a>
             </li>
+            @endcan
         </ul>
     </div>
 </nav>

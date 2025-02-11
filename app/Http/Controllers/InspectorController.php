@@ -39,6 +39,11 @@ class InspectorController extends Controller
         if (!$user || !$user->address || is_null($user->address->longitude) || is_null($user->address->latitude)) {
             return redirect()->back()->with('error', 'location yoqilmagan');
         }
+        $today = Inspector::where('user_id', $user->id)->whereDate('created_at', '=', date('Y-m-d'))->first();
+        if ($today) {
+            return redirect()->back()->with('error', 'Bir kunda 1 marta rasm qoldirish mumkun!');
+        }
+
         $group_id = optional($user->groups->first())->id;
         $p_day = PracticDate::where('group_id', $group_id)->where('day', date('Y-m-d'))->exists();
 

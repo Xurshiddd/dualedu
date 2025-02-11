@@ -8,6 +8,7 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\InspectorController;
 use App\Http\Controllers\PracticDateController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TelegramAuthController;
 use App\Models\Address;
 use App\Models\Group;
@@ -40,6 +41,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         'groups' => GroupController::class,
         'inspectors' => InspectorController::class,
         'practics' => PracticDateController::class,
+        'students' => StudentController::class,
     ]);
     Route::get('/groups/{group}/users', function($id) {
         $group = Group::with(['users' => function ($query) {
@@ -59,4 +61,5 @@ Route::middleware(['guest'])->group(function () {
     });
     Route::get('/auth/telegram/callback', [TelegramAuthController::class, 'callback']);
 });
+
 require __DIR__ . '/auth.php';
