@@ -18,7 +18,7 @@ use Laravel\Socialite\Facades\Socialite;
 
 Route::get('/', function () {
     if (auth()->check()) {
-        if (auth()->user()->hasRole('Admin')) {
+        if (auth()->user()->hasRole('Admin')||auth()->user()->hasRole('Moderator')||auth()->user()->hasRole('Inspector')) {
             return view('dashboard');
         }else {
             return view('welcome');
