@@ -22,29 +22,41 @@ Route::middleware('auth')->group(function () {
 //    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware('auth')->prefix('admin')->group(function () {
-    Route::resources([
-        'roles' => RoleController::class,
-        'permissions' => PermissionController::class,
-        'users' => UserController::class,
-        'addresses' => AddressController::class,
-        'groups' => GroupController::class,
-        'inspectors' => InspectorController::class,
-        'practics' => PracticDateController::class,
-        'students' => StudentController::class,
-    ]);
-    Route::get('/groups/{group}/users', function($id) {
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+    Route::middleware(['role:Admin'])->group(function () {
+        Route::resources([
+            'roles' => RoleController::class,
+            'permissions' => PermissionController::class,
+            'users' => UserController::class,
+        ]);
+    });
+    Route::middleware(['role:Moderator,Admin'])->group(function () {
+        Route::resources([
+            'addresses' => AddressController::class,
+            'groups' => GroupController::class,
+            'practics' => PracticDateController::class,
+            'students' => StudentController::class,
+        ]);
+    });
+    Route::middleware(['role:Inspector,Admin'])->group(function () {
+        Route::resources([
+            'inspectors' => InspectorController::class
+        ]);
+    });
+
+    Route::get('/groups/{group}/users', function ($id) {
         $group = Group::with(['users' => function ($query) {
             $query->doesntHave('address');
         }])->findOrFail($id);
         return response()->json($group->users);
     });
+
     Route::get('/get-practice-dates/{group_id}', function ($group_id) {
         $dates = PracticDate::where('group_id', $group_id)->pluck('day');
         return response()->json($dates);
     });
-
 });
+
 Route::middleware(['guest'])->group(function () {
     Route::get('/auth/telegram/redirect', function () {
         return Socialite::driver('telegram')->redirect();
