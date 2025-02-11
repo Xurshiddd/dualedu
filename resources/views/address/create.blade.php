@@ -8,7 +8,7 @@
     <div class="row">
         <!-- Form -->
         <div class="col-md-6">
-            <a href="{{ route('addresses.index') }}" class="btn bg-info m-3">Ortga</a>
+            <a href="{{ route('addresses.index') }}" class="btn bg-info m-3" style="margin: 10px">Ortga</a>
             <div class="panel panel-info">
                 <div class="panel-heading">Address Create</div>
                 <div class="panel-body">

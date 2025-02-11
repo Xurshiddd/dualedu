@@ -32,12 +32,22 @@
             {{ session('error') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
+        <script>
+            setTimeout(function() {
+                document.getElementById('error-alert').style.display = 'none';
+            }, 5000); // 5 sekunddan keyin yo‘qoladi
+        </script>
     @endif
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" id="success-alert">
             {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
+            <script>
+                setTimeout(function() {
+                    document.getElementById('success-alert').style.display = 'none';
+                }, 5000); // 5 sekunddan keyin yo‘qoladi
+            </script>
     @endif
 
     <form action="{{ route('logout') }}" method="post">

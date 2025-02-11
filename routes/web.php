@@ -4,28 +4,18 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GroupController;
-use App\Http\Controllers\ImageController;
 use App\Http\Controllers\InspectorController;
 use App\Http\Controllers\PracticDateController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TelegramAuthController;
-use App\Models\Address;
 use App\Models\Group;
 use App\Models\PracticDate;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
-Route::get('/', function () {
-    if (auth()->check()) {
-        if (auth()->user()->hasRole('Admin')||auth()->user()->hasRole('Moderator')||auth()->user()->hasRole('Inspector')) {
-            return view('dashboard');
-        }else {
-            return view('welcome');
-        }
-    }
-    return redirect()->route('login');
-})->name('dashboard');
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::middleware('auth')->group(function () {
 //    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 //    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

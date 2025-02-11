@@ -23,4 +23,5 @@ class Group extends Model
     {
         return $this->hasMany(PracticDate::class, 'group_id');
     }
+
 }

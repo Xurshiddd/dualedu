@@ -58,9 +58,9 @@
                         <!-- Status -->
                         <td class="text-center">
                             @if($inspector->status)
-                                <span class="badge bg-success">Bor</span>
+                                <span class="badge bg-success" style="background-color: #00CA79">Bor</span>
                             @else
-                                <span class="badge bg-danger">Yo‘q</span>
+                                <span class="badge bg-danger" style="background-color: red">Yo‘q</span>
                             @endif
                         </td>
 

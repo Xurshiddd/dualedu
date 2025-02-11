@@ -57,8 +57,16 @@ class TelegramSaverController extends Controller
                     'message' => "❌ So'rovda yetarli ma'lumot yo‘q!"
                 ]);
             }
-
             $user = User::where('telegram_id', $telegram_id)->first();
+            $group_id = optional($user->groups->first())->id;
+            $p_day = PracticDate::where('group_id', $group_id)->where('day', date('Y-m-d'))->exists();
+            if (!$p_day) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Bugun amaliyot kuni emas'
+                ]);
+            }
+
             $today = Inspector::where('user_id', $user->id)->whereDate('created_at', '=', date('Y-m-d'))->first();
             if ($today) {
                 return response()->json([
@@ -72,7 +80,6 @@ class TelegramSaverController extends Controller
                     'message' => "❌ Foydalanuvchi topilmadi!"
                 ]);
             }
-            $group_id = optional($user->groups->first())->id;
             $p_day = PracticDate::where('group_id', $group_id)->where('day', date('Y-m-d'))->exists();
 
             if (!$p_day) {
