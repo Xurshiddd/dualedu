@@ -38,7 +38,8 @@
             <table class="table table-bordered">
                 <thead class="table-primary text-center">
                 <tr>
-                    <th>Users</th>
+                    <th>Guruh</th>
+                    <th>Ismi</th>
                     <th>Telefon</th>
                     <th>Status</th>
                     <th>Amaliyotdan uzoqda</th>
@@ -49,6 +50,7 @@
                 <tbody>
                 @foreach($inspectors as $inspector)
                     <tr>
+                        <td>{{ $inspector->group->name ?? 'N/A' }}</td>
                         <!-- Talabaning ismi -->
                         <td>{{ $inspector->user->name ?? 'N/A' }}</td>
 
