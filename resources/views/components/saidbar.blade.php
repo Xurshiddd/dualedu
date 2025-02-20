@@ -3,9 +3,9 @@
         <ul class="nav" id="main-menu">
             <li>
                 <div class="user-img-div">
-                    <p style="font-size: larger; font-weight: 900; color: white; display: flex; justify-content: center; align-items: center">
+                    <a href="{{ route('profile') }}" style="font-size: larger; font-weight: 900; color: white; display: flex; justify-content: center; align-items: center">
                     {{ \Illuminate\Support\Facades\Auth::user()->name }}
-                    </p>
+                    </a>
                 </div>
             </li>
             <li>

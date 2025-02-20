@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Group;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StudentController extends Controller
 {
@@ -41,9 +42,20 @@ class StudentController extends Controller
             'phone' => 'required',
             'password' => 'required',
         ]);
+        $phone = preg_replace('/\D/', '', $request->phone); // Faqat raqamlarni olish
+
+        if (strlen($phone) == 9) {
+            $phone = '998' . $phone;
+        }
+
+        if (!str_starts_with($phone, '998')) {
+            $phone = '998' . $phone;
+        }
+
+        $phone = '+'.$phone;
         $user = User::create([
             'name' => $request->name,
-            'phone' => $request->phone,
+            'phone' => $phone,
             'is_student' => 1,
             'password' => $request->password
         ]);
@@ -94,5 +106,42 @@ class StudentController extends Controller
     {
         User::find($id)->delete();
         return redirect()->back()->with('success', 'Student muvofaqiyatli o\'chirildi');
+    }
+
+    public function profile()
+    {
+        $user = Auth::user();
+        return view('student.profile', compact('user'));
+    }
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'phone' => 'required',
+            'password' => 'nullable',
+        ]);
+        $phone = preg_replace('/\D/', '', $request->phone); // Faqat raqamlarni olish
+
+        if (strlen($phone) == 9) {
+            $phone = '998' . $phone;
+        }
+
+        if (!str_starts_with($phone, '998')) {
+            $phone = '998' . $phone;
+        }
+
+        $phone = '+'.$phone;
+
+        $user = Auth::user();
+        $user->update([
+            'name' => $request->name,
+            'phone' => $phone,
+        ]);
+        if ($request->password){
+            $user->update([
+                'password' => $request->password
+            ]);
+        }
+        return redirect()->back()->with('success', 'Foydalanuvchi malumotlari muvofaqiyatli yangilandi');
     }
 }
