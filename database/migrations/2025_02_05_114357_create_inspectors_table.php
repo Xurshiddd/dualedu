@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('group_id')->constrained('groups');
             $table->boolean('status')->default(false);
             $table->decimal('distance', 10, 2)->nullable();
+            $table->decimal('longitude', 10, 8)->nullable();
+            $table->decimal('latitude', 11, 8)->nullable();
             $table->timestamps();
         });
     }

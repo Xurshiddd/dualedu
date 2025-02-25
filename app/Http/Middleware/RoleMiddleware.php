@@ -15,7 +15,7 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, ...$role): Response
     {
-        if (!auth()->check() || !auth()->user()->hasAnyRole($role)) {
+        if (!auth()->check() || !auth()->user()->hasAnyRole($role) && request()->routeIs('inspector.store') === false) {
             abort(403, 'Unauthorized action.');
         }
         return $next($request);

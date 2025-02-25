@@ -12,7 +12,9 @@ class Inspector extends Model
         'user_id',
         'group_id',
         'status',
-        'distance'
+        'distance',
+        'longitude',
+        'latitude',
     ];
     public function user(): BelongsTo
     {

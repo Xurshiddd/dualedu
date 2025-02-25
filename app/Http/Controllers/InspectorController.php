@@ -65,6 +65,8 @@ class InspectorController extends Controller
             'group_id' => $user->groups[0]->id,
             'status' => $status,
             'distance' => $distance,
+            'longitude' => $userLon,
+            'latitude' => $userLat,
         ]);
         Image::create([
             'name' => $file->getClientOriginalName(),

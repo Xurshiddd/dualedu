@@ -43,7 +43,8 @@
                     <th>Telefon</th>
                     <th>Status</th>
                     <th>Amaliyotdan uzoqda</th>
-                    <th>Joylashuv</th>
+                    <th>Amaliyot joylashuvi</th>
+                    <th>Rasm yuborilgan joylashuv</th>
                     <th>Rasm</th>
                 </tr>
                 </thead>
@@ -76,6 +77,17 @@
                         <td class="text-center">
                             @if($inspector->user->address)
                                 <a href="https://www.google.com/maps/search/?api=1&query={{ $inspector->user->address->latitude }},{{ $inspector->user->address->longitude }}"
+                                   target="_blank"
+                                   class="btn btn-sm btn-info">
+                                    <i class="fas fa-map-marker-alt"></i> Xaritada ko‘rish
+                                </a>
+                            @else
+                                <span>N/A</span>
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            @if($inspector->longitude && $inspector->latitude)
+                                <a href="https://www.google.com/maps/search/?api=1&query={{ $inspector->latitude }},{{ $inspector->longitude }}"
                                    target="_blank"
                                    class="btn btn-sm btn-info">
                                     <i class="fas fa-map-marker-alt"></i> Xaritada ko‘rish

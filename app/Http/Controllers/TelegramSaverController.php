@@ -150,6 +150,8 @@ class TelegramSaverController extends Controller
                 'group_id' => $group_id,
                 'status' => $status,
                 'distance' => $distance,
+                'longitude' => $longitude,
+                'latitude' => $latitude,
             ]);
 
             Image::create([
