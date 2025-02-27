@@ -7,6 +7,7 @@ use App\Models\Image;
 use App\Models\Inspector;
 use App\Models\PracticDate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class InspectorController extends Controller
 {
@@ -50,32 +51,41 @@ class InspectorController extends Controller
         if (!$p_day) {
             return redirect()->back()->with('error', 'Bugun amaliyot kuni emas');
         }
-        $storedLat = $user->address->latitude;
-        $storedLon = $user->address->longitude;
-        $distance = $this->calculateDistance($userLat, $userLon, $storedLat, $storedLon);
-        $status = $distance <= 1300;
-        $file = $request->file('photo');
-        $file_name = time().$file->getClientOriginalName();
-        $file->move(public_path('uploads'), $file_name);
+        try {
+            DB::beginTransaction();
+            $storedLat = $user->address->latitude;
+            $storedLon = $user->address->longitude;
+            $distance = $this->calculateDistance($userLat, $userLon, $storedLat, $storedLon);
+            $status = $distance <= 1300;
+            $file = $request->file('photo');
+            $file_name = time() . $file->getClientOriginalName();
+            $file->move(public_path('uploads'), $file_name);
 
-        $file_url = 'uploads/' . $file_name;
+            $file_url = 'uploads/' . $file_name;
 
-        $inp = Inspector::create([
-            'user_id' => $user->id,
-            'group_id' => $user->groups[0]->id,
-            'status' => $status,
-            'distance' => $distance,
-            'longitude' => $userLon,
-            'latitude' => $userLat,
-        ]);
-        Image::create([
-            'name' => $file->getClientOriginalName(),
-            'url' => $file_url,
-            'inspector_id' => $inp->id,
-        ]);
-        $res = 'Rasm saqlandi geolacatsiya to\'g\'ri kelmadi';
-        if ($status == true) {
-            $res = 'Rasm saqlandi siz amaliyot joyidasiz';
+            $inp = Inspector::create([
+                'user_id' => $user->id,
+                'group_id' => $user->groups[0]->id,
+                'status' => $status,
+                'distance' => $distance,
+                'longitude' => $userLon,
+                'latitude' => $userLat,
+            ]);
+            Image::create([
+                'name' => $file->getClientOriginalName(),
+                'url' => $file_url,
+                'inspector_id' => $inp->id,
+            ]);
+            $res = 'Rasm saqlandi geolacatsiya to\'g\'ri kelmadi';
+            if ($status == true) {
+                $res = 'Rasm saqlandi siz amaliyot joyidasiz';
+            }
+            DB::commit();
+        }catch (\Exception $exception){
+            DB::rollBack();
+            $res = $exception->getMessage();
+            \Log::error($res);
+            return redirect()->back()->with('error', $res);
         }
         return redirect()->back()->with('success', $res);
     }

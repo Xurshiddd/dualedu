@@ -39,23 +39,33 @@ class AddressController extends Controller
             'longitude' => 'nullable|string|max:255',
             'latitude' => 'nullable|string|max:255',
         ]);
-
-        Address::create([
-            'user_id' => $request->user_id,
-            'company_name' => $request->company_name,
-            'street' => $request->street,
-            'number' => $request->number,
-            'city' => $request->city,
-            'longitude' => $request->longitude,
-            'latitude' => $request->latitude,
-        ]);
+        try {
+            Address::create([
+                'user_id' => $request->user_id,
+                'company_name' => $request->company_name,
+                'street' => $request->street,
+                'number' => $request->number,
+                'city' => $request->city,
+                'longitude' => $request->longitude,
+                'latitude' => $request->latitude,
+            ]);
+        }catch (\Exception $exception){
+            \Log::error($exception->getMessage());
+            return back()->with('error', $exception->getMessage());
+        }
 
         return redirect()->route('addresses.create')->with('success', 'Address added successfully!');
     }
 
     public function destroy(Address $address)
     {
-        $address->delete();
+        try {
+            $address->delete();
+        }catch (\Exception $exception){
+            \Log::error($exception->getMessage());
+            return back()->with('error', $exception->getMessage());
+        }
+
         return redirect()->route('addresses.index')->with('success', 'Address deleted successfully!');
     }
 }

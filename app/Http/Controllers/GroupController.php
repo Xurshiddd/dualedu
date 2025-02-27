@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Group;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class GroupController extends Controller
 {
@@ -27,16 +28,21 @@ class GroupController extends Controller
             'users_id' => 'nullable|array',
             'users_id.*' => 'exists:users,id',
         ]);
+        try {
+            DB::beginTransaction();
+            $group = Group::create([
+                'name' => $request->name,
+                'kurs_num' => $request->kurs_num,
+            ]);
 
-        $group = Group::create([
-            'name' => $request->name,
-            'kurs_num' => $request->kurs_num,
-        ]);
-
-        if ($request->has('users_id')) {
-            $group->users()->attach($request->users_id);
+            if ($request->has('users_id')) {
+                $group->users()->attach($request->users_id);
+            }
+            DB::commit();
+        }catch (\Exception $exception){
+            DB::rollBack();
+            return back()->with('error', $exception->getMessage());
         }
-
         return redirect()->route('groups.index')->with('success', 'Group created successfully.');
     }
 
@@ -46,8 +52,7 @@ class GroupController extends Controller
     }
     public function edit(Group $group)
     {
-        $groupUsers = $group->users()->pluck('users.id'); // Shu guruhga tegishli foydalanuvchilar
-
+        $groupUsers = $group->users()->pluck('users.id');
         $users = User::where(function ($query) use ($groupUsers) {
             $query->whereDoesntHave('groups')
             ->orWhereIn('id', $groupUsers);
@@ -66,18 +71,24 @@ class GroupController extends Controller
             'users_id' => 'nullable|array',
             'users_id.*' => 'exists:users,id',
         ]);
+        try {
+            DB::beginTransaction();
+            $group->update([
+                'name' => $request->name,
+                'kurs_num' => $request->kurs_num,
+            ]);
 
-        $group->update([
-            'name' => $request->name,
-            'kurs_num' => $request->kurs_num,
-        ]);
-
-        if ($request->has('users_id')) {
-            $group->users()->sync($request->users_id);
-        } else {
-            $group->users()->detach();
+            if ($request->has('users_id')) {
+                $group->users()->sync($request->users_id);
+            } else {
+                $group->users()->detach();
+            }
+            DB::commit();
+        }catch (\Exception $exception){
+            DB::rollBack();
+            \Log::error($exception->getMessage());
+            return back()->with('error', $exception->getMessage());
         }
-
         return redirect()->route('groups.index')->with('success', 'Group updated successfully.');
     }
     public function destroy(Group $group)

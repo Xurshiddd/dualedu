@@ -6,6 +6,7 @@ use App\Models\Group;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class StudentController extends Controller
 {
@@ -53,14 +54,22 @@ class StudentController extends Controller
         }
 
         $phone = '+'.$phone;
-        $user = User::create([
-            'name' => $request->name,
-            'phone' => $phone,
-            'is_student' => 1,
-            'password' => $request->password
-        ]);
-        $user->assignRole('User');
-        return redirect()->back()->with('success', 'Student muvofaqiyatli saqlandi');
+        try {
+            DB::beginTransaction();
+            $user = User::create([
+                'name' => $request->name,
+                'phone' => $phone,
+                'is_student' => 1,
+                'password' => $request->password
+            ]);
+            $user->assignRole('User');
+            DB::commit();
+        }catch (\Exception $exception){
+            DB::rollBack();
+            \Log::error($exception->getMessage());
+            return back()->with('error', $exception->getMessage());
+        }
+        return redirect()->back()->with('success', 'Talaba muvofaqiyatli saqlandi');
     }
     public function show($id)
     {
@@ -90,17 +99,24 @@ class StudentController extends Controller
         }
 
         $phone = '+'.$phone;
-
-        $student->update([
-            'name' => $request->name,
-            'phone' => $phone,
-        ]);
-        if ($request->password){
+        try {
+            DB::beginTransaction();
             $student->update([
-                'password' => $request->password
+                'name' => $request->name,
+                'phone' => $phone,
             ]);
+            if ($request->password) {
+                $student->update([
+                    'password' => $request->password
+                ]);
+            }
+            DB::commit();
+        }catch (\Exception $exception){
+            DB::rollBack();
+            \Log::error($exception->getMessage());
+            return back()->with('error', $exception->getMessage());
         }
-        return redirect()->route('students.index')->with('success', 'Student muvofaqiyatli yangilandi');
+        return redirect()->route('students.index')->with('success', 'Talaba muvofaqiyatli yangilandi');
     }
     public function destroy($id)
     {
@@ -133,14 +149,22 @@ class StudentController extends Controller
         $phone = '+'.$phone;
 
         $user = Auth::user();
-        $user->update([
-            'name' => $request->name,
-            'phone' => $phone,
-        ]);
-        if ($request->password){
+        try {
+            DB::beginTransaction();
             $user->update([
-                'password' => $request->password
+                'name' => $request->name,
+                'phone' => $phone,
             ]);
+            if ($request->password) {
+                $user->update([
+                    'password' => $request->password
+                ]);
+            }
+            DB::commit();
+        }catch (\Exception $exception){
+            DB::rollBack();
+            \Log::error($exception->getMessage());
+            return redirect()->back()->with('error', $exception->getMessage());
         }
         return redirect()->back()->with('success', 'Foydalanuvchi malumotlari muvofaqiyatli yangilandi');
     }

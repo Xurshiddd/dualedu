@@ -144,7 +144,6 @@ class TelegramSaverController extends Controller
 
             $file_url = "uploads/".$file_name;
 
-
             $inspector = Inspector::create([
                 'user_id' => $user->id,
                 'group_id' => $group_id,
