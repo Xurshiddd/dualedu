@@ -151,6 +151,7 @@ class TelegramSaverController extends Controller
                 'distance' => $distance,
                 'longitude' => $longitude,
                 'latitude' => $latitude,
+                'withadd' => 'telegram'
             ]);
 
             Image::create([

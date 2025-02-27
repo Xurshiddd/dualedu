@@ -70,6 +70,7 @@ class InspectorController extends Controller
                 'distance' => $distance,
                 'longitude' => $userLon,
                 'latitude' => $userLat,
+                'withadd' => 'web'
             ]);
             Image::create([
                 'name' => $file->getClientOriginalName(),

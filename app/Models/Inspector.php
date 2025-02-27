@@ -15,6 +15,7 @@ class Inspector extends Model
         'distance',
         'longitude',
         'latitude',
+        'withadd'
     ];
     public function user(): BelongsTo
     {

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('distance', 10, 2)->nullable();
             $table->decimal('longitude', 10, 8)->nullable();
             $table->decimal('latitude', 11, 8)->nullable();
+            $table->string('withadd')->nullable();
             $table->timestamps();
         });
     }
