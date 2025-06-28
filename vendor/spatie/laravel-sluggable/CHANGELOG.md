@@ -2,6 +2,39 @@
 
 All notable changes to `laravel-sluggable` will be documented in this file
 
+## 3.7.4 - 2025-02-28
+
+### What's Changed
+
+* Allow to generate custom suffixes by @josepdecid in https://github.com/spatie/laravel-sluggable/pull/289
+
+### New Contributors
+
+* @josepdecid made their first contribution in https://github.com/spatie/laravel-sluggable/pull/289
+
+**Full Changelog**: https://github.com/spatie/laravel-sluggable/compare/3.7.3...3.7.4
+
+## 3.7.3 - 2025-02-20
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.2.0 to 2.3.0 by @dependabot in https://github.com/spatie/laravel-sluggable/pull/287
+* Laravel 12.x Compatibility by @laravel-shift in https://github.com/spatie/laravel-sluggable/pull/288
+
+**Full Changelog**: https://github.com/spatie/laravel-sluggable/compare/3.7.2...3.7.3
+
+## 3.7.2 - 2024-12-30
+
+### What's Changed
+
+* Fix query for translatable slug by @andrii-trush in https://github.com/spatie/laravel-sluggable/pull/285
+
+### New Contributors
+
+* @andrii-trush made their first contribution in https://github.com/spatie/laravel-sluggable/pull/285
+
+**Full Changelog**: https://github.com/spatie/laravel-sluggable/compare/3.7.1...3.7.2
+
 ## 3.7.1 - 2024-12-23
 
 ### What's Changed

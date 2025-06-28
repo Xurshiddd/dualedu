@@ -65,5 +65,7 @@ Route::middleware(['guest'])->group(function () {
     });
     Route::get('/auth/telegram/callback', [TelegramAuthController::class, 'callback']);
 });
-
+Route::get('asd', function () {
+    return bcrypt('password');
+});
 require __DIR__ . '/auth.php';
